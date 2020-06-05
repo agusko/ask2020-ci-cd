@@ -53,8 +53,16 @@ jobs:
 workflows:
     build-and-test:
       jobs:
-        - build-and-test-server
-        - build-and-test-client
+        - build-and-test-server:
+          filters:
+            branches:
+              only:
+                - master
+        - build-and-test-client:
+          filters:
+            branches:
+              only:
+                - master
         - docker-hub:
             requires:
               - build-and-test-server
