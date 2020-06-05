@@ -9,16 +9,16 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: ./server
-      -run:
+      - run:
           command: npm install
           working_directory: ./server
-      -run:
+      - run:
           command: npm test
           working_directory: ./server
-      -run:
+      - run:
           command: npm install
           working_directory: ./client
-      -run:
+      - run:
           command: npm test
           working_directory: ./client
 workflows:
