@@ -23,7 +23,32 @@ jobs:
       - run:
           command: npm test
           working_directory: ./client
+  docker-hub:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Database_image
+          command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            sudo docker build ./db -t agusko/ask2020-ci-cd:database_image
+            sudo docker push agusko/ask2020-ci-cd:database_image
+      - run:
+          name: Server_image
+          command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            sudo docker build ./server -t agusko/ask2020-ci-cd:server_image
+            sudo docker push agusko/ask2020-ci-cd:server_image
+      - run:
+          name: Client_image
+          command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            sudo docker build ./db -t agusko/ask2020-ci-cd:client_image
+            sudo docker push agusko/ask2020-ci-cd:client_image
 workflows:
     build-and-test:
       jobs:
         - build-and-test
+        - docker-hub:
+            requires:
+              - build-and-test
