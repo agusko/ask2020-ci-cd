@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  node: circleci/node@1.1.6
+  node: circleci/node@2.1.0
 jobs:
   build-and-test:
     executor:
@@ -13,11 +13,11 @@ jobs:
           command: npm install
           working_directory: ./server
       - run:
-          command: npm test
-          working-directory: ./server
-      - run:
           command: npm install
-          working_directory: ./client
+          working-directory: ./client
+      - run:
+          command: npm test
+          working_directory: ./server
       - run:
           command: npm test
           working_directory: ./client
