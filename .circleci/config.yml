@@ -2,24 +2,29 @@ version: 2.1
 orbs:
   node: circleci/node@2.1.0
 jobs:
-  build-and-test:
+  build-and-test-server:
     executor:
       name: node/default
     steps:
       - checkout
       - node/install-packages:
           app-dir: ./server
+      - run:
+          command: npm install
+          working_directory: ./server
+      - run:
+          command: npm test
+          working_directory: ./server
+  build-and-test-client:
+    executor:
+      name: node/default
+    steps:
+      - checkout
       - node/install-packages:
           app-dir: ./client
       - run:
           command: npm install
-          working_directory: ./server
-      - run:
-          command: npm install
-          working-directory: ./client
-      - run:
-          command: npm test
-          working_directory: ./server
+          working_directory: ./client
       - run:
           command: npm test
           working_directory: ./client
@@ -48,7 +53,9 @@ jobs:
 workflows:
     build-and-test:
       jobs:
-        - build-and-test
+        - build-and-test-server
+        - build-and-test-client
         - docker-hub:
             requires:
-              - build-and-test
+              - build-and-test-server
+              - build-and-test-client
